@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@500&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap");
+
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: "Roboto", sans-serif;
+        font-weight: 500;
+        font-size: 1.2rem;
+      }
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        height: 500px;
+        width: 300px;
+        border: 1px solid black;
+        border-radius: 20px;
+        margin: 0px 20px;
+        background-color: black;
+        border: 5px solid rgb(184, 184, 184);
+        /* overflow: auto; */
+        position: relative;
+      }
+
+      .in {
+        height: 30%;
+        width: 100%;
+        /*  border-bottom: 1px solid blue; */
+        color: white;
+        display: flex;
+        justify-content: flex-end;
+        align-items: end;
+        font-size: 4rem;
+        padding: 5px 10px;
+        overflow: auto;
+        flex-direction: column;
+        position: relative;
+      }
+      .operation {
+        font-size: 2.7rem;
+        position: absolute;
+        bottom: 20%;
+        right: 5%;
+      }
+
+      .equal {
+        font-size: 1.4rem;
+        color: gray;
+        /*  transform: translate(-6px, -48px) scale(1.8); */
+        transition: 0.5s;
+        position: absolute;
+        bottom: 2%;
+        right: 5%;
+      }
+
+      .btn {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        margin: 0px 10px;
+        height: 70%;
+      }
+      .btn > button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        color: white;
+        background: rgb(67, 67, 67);
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .btn > button:active {
+        background: rgb(86, 86, 86);
+        transform: scale(0.9);
+      }
+
+      .btn > button:nth-child(1),
+      .btn > button:nth-child(2),
+      .btn > button:nth-child(3) {
+        background-color: lightgray;
+        color: black;
+      }
+
+      .btn > button:nth-child(4),
+      .btn > button:nth-child(8),
+      .btn > button:nth-child(12),
+      .btn > button:nth-child(16) {
+        background-color: rgb(251, 142, 0);
+        color: rgb(255, 255, 255);
+      }
+      .btn > button:nth-child(17) {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        width: 125px;
+        border-radius: 30px;
+        height: 85%;
+        text-align: left;
+        padding-left: 25px;
+      }
+
+      .container > h1 {
+        position: absolute;
+        top: -10%;
+        left: 2.5%;
+        font-size: 2rem;
+        letter-spacing: 2px;
+        font-family: "Poppins", sans-serif;
+        transition: 0.5s;
+        transform: translateY(70px);
+        z-index: -1;
+        color: rgb(46, 46, 46);
+      }
+
+      .container > h1 > b {
+        font-size: 2rem;
+        letter-spacing: 2px;
+        font-family: "Poppins", sans-serif;
+        transition: 0.5s;
+      }
+
+      .container:hover > h1 b {
+        animation: blink 0.2s forwards;
+        animation-iteration-count: 4;
+      }
+
+      /*  .container > h1::first-letter {
+        color: orange;
+      } */
+
+      .container:hover > h1 {
+        transform: translateY(-14px);
+      }
+
+      @keyframes blink {
+        from {
+          color: black;
+        }
+        to {
+          color: rgb(251, 142, 0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="in">
+        <p class="operation">0</p>
+        <p class="equal">0</p>
+      </div>
+      <div class="btn">
+        <button class="clear">AC</button>
+        <button value="%">%</button>
+        <button class="delete">A</button>
+        <button value="/">÷</button>
+        <button value="7">7</button>
+        <button value="8">8</button>
+        <button value="9">9</button>
+        <button value="*">x</button>
+        <button value="4">4</button>
+        <button value="5">5</button>
+        <button value="6">6</button>
+        <button value="-">-</button>
+        <button value="1">1</button>
+        <button value="2">2</button>
+        <button value="3">3</button>
+        <button value="+">+</button>
+        <button value="0">0</button>
+        <button value=".">.</button>
+        <button class="eqq">=</button>
+      </div>
+
+      <h1><b>C</b>AL<b>C</b>ULATOR</h1>
+    </div>
+
+    <script>
+      //the main
+      let inp = document.querySelector(".in");
+
+      //Button div the listen to click
+      let b = document.querySelector(".btn");
+
+      let calculation = document.querySelector(".operation");
+
+      let equal = document.querySelector(".equal");
+
+      //CLear button
+
+      let clear = document.querySelector(".clear");
+
+      //equal button
+      let solve = document.querySelector(".eqq");
+
+      //delete button
+      let del = document.querySelector(".delete");
+
+      ///place holder
+      let placeholder = " ";
+
+      //bool listener
+
+      let listenTo = false;
+
+      b.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        if (e.target.className !== "btn") {
+          if (e.target.className !== "" || e.target.className === "eqq") {
+            //console.log(10);
+          } else {
+            //Manipulating the style and animation
+            equal.style.bottom = "2%";
+            equal.style.right = "5%";
+            equal.style.fontSize = "1.4rem";
+            calculation.style.opacity = "1";
+
+            console.log(e.target.value);
+
+            //adding the alue to the input calcaulation
+
+            placeholder += e.target.value;
+
+            calculation.innerHTML = placeholder;
+
+            equalResult();
+
+            //reponsive
+            response();
+          }
+
+          //clearing the fields
+
+          clear.addEventListener("click", () => {
+            calculation.innerHTML = "0";
+            equal.innerHTML = "0";
+            placeholder = "";
+            console.log("clear");
+
+            equal.style.bottom = "2%";
+            equal.style.right = "5%";
+            equal.style.fontSize = "1.4rem";
+
+            calculation.style.opacity = "1";
+          });
+
+          //showing the equals
+          solve.addEventListener("click", (e) => {
+            if (equal.innerHTML !== "0") {
+              equal.style.bottom = "20%";
+              equal.style.right = "5%";
+
+              equal.style.fontSize = "1.5rem";
+
+              calculation.style.opacity = "0";
+
+              console.log(placeholder);
+
+              listenTo = true;
+            }
+          });
+        }
+      });
+
+      del.addEventListener("click", (e) => {
+        if (placeholder.length < 2) {
+          placeholder = "";
+          calculation.innerHTML = "0";
+          equal.innerHTML = "0";
+          console.log("iif");
+          equal.style.bottom = "2%";
+          equal.style.right = "5%";
+          equal.style.fontSize = "1.4rem";
+
+          calculation.style.opacity = "1";
+        } else {
+          if (listenTo) {
+            calculation.innerHTML = "0";
+            equal.innerHTML = "0";
+            placeholder = "";
+            console.log("clear");
+
+            equal.style.bottom = "2%";
+            equal.style.right = "5%";
+            equal.style.fontSize = "1.4rem";
+
+            calculation.style.opacity = "1";
+
+            listenTo = false;
+          } else {
+            placeholder = placeholder.substr(0, placeholder.length - 1);
+            console.log(placeholder.length);
+            calculation.innerHTML = placeholder;
+            e.stopPropagation();
+            e.preventDefault();
+            console.log(placeholder.substr(0, placeholder.length - 1));
+            equalResult();
+          }
+        }
+      });
+
+      //solve the given equation
+      function equalResult() {
+        equal.innerHTML = eval(placeholder);
+      }
+
+      function response() {
+        if (placeholder.length >= 11) {
+          calculation.style.fontSize = "2.3rem";
+        }
+      }
+
+      //console.log(placeholder);
+    </script>
+  </body>
+</html>
